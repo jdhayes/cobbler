@@ -331,17 +331,21 @@ echo "$network via $router dev $iname" >> $ipv6_routesfile
 # End configuration for $iname
     #end for
     ## =============================================================================
-    ## Configure name server search path in /etc/resolv.conf
+    ## Configure name server search path in /etc/resolv.conf and devfile
     #set $num_ns = $len($name_servers)
     #set $num_ns_search = $len($name_servers_search)
     #if $num_ns_search > 0
 
 sed -i -e "/^search /d" /etc/resolv.conf
+sed -i -e "/^SEARCH/d" $devfile
 echo -n "search " >>/etc/resolv.conf
+echo -n "SEARCH='" >> $devfile
         #for $nameserversearch in $name_servers_search
 echo -n "$nameserversearch " >>/etc/resolv.conf
+echo -n "$nameserversearch " >> $devfile
         #end for
 echo "" >>/etc/resolv.conf
+echo -en "'\n" >>$devfile
     #end if
     ## =============================================================================
     ## Configure name servers in /etc/resolv.conf
